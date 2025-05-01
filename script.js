@@ -102,27 +102,78 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevBtn = slider.querySelector('.hero-control.prev');
     const nextBtn = slider.querySelector('.hero-control.next');
     let currentIndex = 0;
+    let isTransitioning = false;
 
-    // 顯示第一張圖片
+    // 預加載下一張圖片
+    function preloadNextImage(index) {
+        const nextIndex = (index + 1) % images.length;
+        const nextImage = new Image();
+        nextImage.src = images[nextIndex].src;
+    }
+
+    // 顯示第一張圖片並預加載第二張
     images[0].classList.add('active');
+    preloadNextImage(0);
+
+    // 切換到指定圖片
+    function switchToImage(newIndex) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        images[currentIndex].classList.remove('active');
+        images[newIndex].classList.add('active');
+        currentIndex = newIndex;
+
+        // 預加載下一張圖片
+        preloadNextImage(currentIndex);
+
+        // 防止快速切換
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 1000);
+    }
 
     // 切換到上一張圖片
     function prevSlide() {
-        images[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        images[currentIndex].classList.add('active');
+        const newIndex = (currentIndex - 1 + images.length) % images.length;
+        switchToImage(newIndex);
     }
 
     // 切換到下一張圖片
     function nextSlide() {
-        images[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex + 1) % images.length;
-        images[currentIndex].classList.add('active');
+        const newIndex = (currentIndex + 1) % images.length;
+        switchToImage(newIndex);
     }
 
     // 添加按鈕事件監聽
     prevBtn.addEventListener('click', prevSlide);
     nextBtn.addEventListener('click', nextSlide);
+
+    // 添加觸控滑動支援
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    slider.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    slider.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, false);
+
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchEndX - touchStartX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                prevSlide();
+            } else {
+                nextSlide();
+            }
+        }
+    }
 
     // 自動輪播
     let autoplayInterval = setInterval(nextSlide, 5000);
@@ -134,6 +185,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 滑鼠移出時恢復自動輪播
     slider.addEventListener('mouseleave', () => {
+        autoplayInterval = setInterval(nextSlide, 5000);
+    });
+
+    // 觸控開始時暫停自動輪播
+    slider.addEventListener('touchstart', () => {
+        clearInterval(autoplayInterval);
+    });
+
+    // 觸控結束時恢復自動輪播
+    slider.addEventListener('touchend', () => {
         autoplayInterval = setInterval(nextSlide, 5000);
     });
 
