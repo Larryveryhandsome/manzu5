@@ -220,4 +220,325 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.material-category').forEach(category => {
         category.classList.add('collapsed');
     });
+
+    // 房型資料
+    const floorplanData = {
+        townhouse: {
+            title: '透天美墅',
+            subtitle: '冬山｜全新落成｜閑靜透天',
+            images: [
+                ...Array.from({length: 28}, (_, i) => `透天/pic/1 (${i + 1}).jpg`)
+            ],
+            info: {
+                '格局': '四層透天',
+                '車位': '門前停車',
+                '價格': '1,320萬',
+                '建坪': '約46坪',
+                '地坪': '約23坪'
+            },
+            layout: {
+                '一樓': '門廳、客廳、餐廳、廚房、衛浴',
+                '二樓': '主臥室(含衛浴)、次臥室',
+                '三樓': '家庭室、臥室、衛浴',
+                '四樓': '屋突、露台'
+            },
+            features: {
+                title: '特色說明',
+                description: '✨ 方正客廳，空間感十足\n☀️ 全棟採光通風良好\n🚗 門前車位設計，停車方便\n🌅 頂樓露台，視野遼闊\n🏢 近羅東市區生活圈'
+            }
+        },
+        b2: {
+            title: 'B2 房型',
+            images: [
+                'B2/B2 (1).jpg',
+                'B2/B2 (2).jpg',
+                'B2/B2 (3).jpg',
+                'B2/B2 (4).jpg',
+                'B2/B2 (5).jpg',
+                'B2/B2 (6).jpg',
+                'B2/B2 (7).jpg',
+                'B2/B2 (8).jpg',
+                'B2/B2 (9).jpg',
+                'B2/B2 (10).jpg',
+                'B2/B2 (11).jpg',
+                'B2/B2 (12).jpg',
+                'B2/B2 (13).jpg',
+                'B2/B2 (14).jpg',
+                'B2/B2 (15).jpg'
+            ],
+            info: {
+                '格局': '兩房兩廳一衛',
+                '車位': '平面車位',
+                '價格': '728萬',
+                '樓層': '2樓',
+                '建坪': '30.91坪',
+                '主建物': '17.39坪',
+                '附屬建物': '2.59坪',
+                '共用部分': '10.93坪',
+                '地坪': '5.10坪'
+            },
+            features: {
+                title: '特色說明',
+                description: '便利性及機動性兼具，搬運物品方便。二樓位置適中，採光通風良好，居住舒適度高。'
+            }
+        },
+        b10: {
+            title: 'B10 房型',
+            images: [
+                'B10/B10 (1).jpg',
+                'B10/B10 (2).jpg',
+                'B10/B10 (3).jpg',
+                'B10/B10 (4).jpg',
+                'B10/B10 (5).jpg',
+                'B10/B10 (6).jpg',
+                'B10/B10 (7).jpg',
+                'B10/B10 (8).jpg',
+                'B10/B10 (9).jpg',
+                'B10/B10 (10).jpg',
+                'B10/B10 (11).jpg',
+                'B10/B10 (12).jpg'
+            ],
+            info: {
+                '格局': '兩房兩廳一衛',
+                '車位': '平面車位',
+                '價格': '688萬',
+                '樓層': '2樓',
+                '建坪': '30.81坪',
+                '主建物': '17.44坪',
+                '附屬建物': '2.48坪',
+                '共用部分': '10.90坪',
+                '地坪': '5.10坪'
+            },
+            features: {
+                title: '特色說明',
+                description: '位於二樓的實用戶型，採光通風良好，空間規劃合理。適合小家庭或首購族群，性價比高。'
+            }
+        },
+        c6: {
+            title: 'C6 房型',
+            images: [
+                'C6/C6 (1).jpg',
+                'C6/C6 (2).jpg',
+                'C6/C6 (3).jpg',
+                'C6/C6 (4).jpg',
+                'C6/C6 (5).jpg',
+                'C6/C6 (6).jpg',
+                'C6/C6 (7).jpg',
+                'C6/C6 (8).jpg',
+                'C6/C6 (9).jpg',
+                'C6/C6 (10).jpg',
+                'C6/C6 (11).jpg',
+                'C6/C6 (12).jpg',
+                'C6/C6 (13).jpg'
+            ],
+            info: {
+                '格局': '兩房兩廳一衛',
+                '車位': '平面車位',
+                '價格': '738萬',
+                '樓層': '3樓',
+                '建坪': '31.55坪',
+                '主建物': '17.56坪',
+                '附屬建物': '2.83坪',
+                '共用部分': '11.16坪',
+                '地坪': '5.22坪'
+            },
+            features: {
+                title: '特色說明',
+                description: '三樓位置優越，視野開闊，採光充足。戶型方正，空間規劃靈活，適合追求生活品質的小家庭。'
+            }
+        },
+        c10: {
+            title: 'C10 房型',
+            images: [
+                'C10/C10 (1).jpg',
+                'C10/C10 (2).jpg',
+                'C10/C10 (3).jpg',
+                'C10/C10 (4).jpg',
+                'C10/C10 (5).jpg',
+                'C10/C10 (6).jpg',
+                'C10/C10 (7).jpg',
+                'C10/C10 (8).jpg',
+                'C10/C10 (9).jpg',
+                'C10/C10 (10).jpg',
+                'C10/C10 (11).jpg'
+            ],
+            info: {
+                '格局': '兩房兩廳一衛',
+                '車位': '平面車位',
+                '價格': '698萬',
+                '樓層': '3樓',
+                '建坪': '30.81坪',
+                '主建物': '17.44坪',
+                '附屬建物': '2.48坪',
+                '共用部分': '10.90坪',
+                '地坪': '5.10坪'
+            },
+            features: {
+                title: '特色說明',
+                description: '三樓位置優越，視野開闊，採光充足。戶型方正，空間規劃合理，性價比高，適合首購族或小家庭。'
+            }
+        },
+        d6: {
+            title: 'D6 房型',
+            images: [
+                'D6/D6 (1).jpg',
+                'D6/D6 (2).jpg',
+                'D6/D6 (3).jpg',
+                'D6/D6 (4).jpg',
+                'D6/D6 (5).jpg',
+                'D6/D6 (6).jpg',
+                'D6/D6 (7).jpg',
+                'D6/D6 (8).jpg',
+                'D6/D6 (9).jpg',
+                'D6/D6 (10).jpg',
+                'D6/D6 (11).jpg',
+                'D6/D6 (12).jpg',
+                'D6/D6 (13).jpg',
+                'D6/D6 (14).jpg',
+                'D6/D6 (15).jpg'
+            ],
+            info: {
+                '格局': '兩房兩廳一衛',
+                '車位': '平面車位',
+                '價格': '758萬',
+                '樓層': '4樓',
+                '建坪': '31.55坪',
+                '主建物': '17.56坪',
+                '附屬建物': '2.83坪',
+                '共用部分': '11.16坪',
+                '地坪': '5.22坪'
+            },
+            features: {
+                title: '特色說明',
+                description: '四樓高樓層，視野遼闊，採光充足。戶型方正，空間規劃完善，適合追求優質居住環境的家庭。'
+            }
+        },
+        d8: {
+            title: 'D8 房型',
+            images: [
+                'D8/D8 (1).jpg',
+                'D8/D8 (2).jpg',
+                'D8/D8 (3).jpg',
+                'D8/D8 (4).jpg',
+                'D8/D8 (5).jpg',
+                'D8/D8 (6).jpg',
+                'D8/D8 (7).jpg',
+                'D8/D8 (8).jpg',
+                'D8/D8 (9).jpg',
+                'D8/D8 (10).jpg',
+                'D8/D8 (11).jpg',
+                'D8/D8 (12).jpg',
+                'D8/D8 (13).jpg',
+                'D8/D8 (14).jpg',
+                'D8/D8 (15).jpg'
+            ],
+            info: {
+                '格局': '兩房兩廳一衛',
+                '車位': '平面車位',
+                '價格': '733萬',
+                '樓層': '4樓',
+                '建坪': '29.34坪',
+                '主建物': '16.93坪',
+                '附屬建物': '2.03坪',
+                '共用部分': '10.38坪',
+                '地坪': '5.10坪'
+            },
+            features: {
+                title: '特色說明',
+                description: '四樓高樓層，視野遼闊，採光充足。戶型方正，空間規劃完善，性價比優異，適合追求優質生活的家庭。'
+            }
+        }
+    };
+
+    // 浮動視窗功能
+    const modal = document.querySelector('.modal-overlay');
+    const modalClose = modal.querySelector('.modal-close');
+    const modalPhotoShowcase = modal.querySelector('.modal-photo-showcase');
+    const modalInfoGrid = modal.querySelector('.modal-info-grid');
+    const modalFeatures = modal.querySelector('.modal-features');
+    let currentPhotoIndex = 0;
+    let currentFloorplanType = '';
+
+    // 關閉浮動視窗
+    modalClose.addEventListener('click', () => {
+        modal.classList.remove('active');
+    });
+
+    // 點擊外部關閉浮動視窗
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+
+    // 照片輪播控制
+    const modalPrevBtn = modal.querySelector('.modal-photo-control.prev');
+    const modalNextBtn = modal.querySelector('.modal-photo-control.next');
+
+    modalPrevBtn.addEventListener('click', () => {
+        showModalPhoto('prev');
+    });
+
+    modalNextBtn.addEventListener('click', () => {
+        showModalPhoto('next');
+    });
+
+    // 顯示照片
+    function showModalPhoto(direction) {
+        const photos = modalPhotoShowcase.querySelectorAll('img');
+        photos[currentPhotoIndex].classList.remove('active');
+
+        if (direction === 'next') {
+            currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+        } else {
+            currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+        }
+
+        photos[currentPhotoIndex].classList.add('active');
+    }
+
+    // 開啟浮動視窗
+    document.querySelectorAll('.floorplan-card').forEach(card => {
+        const detailsBtn = card.querySelector('.details-link');
+        detailsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const type = card.dataset.type;
+            currentFloorplanType = type;
+            openModal(type);
+        });
+    });
+
+    function openModal(type) {
+        const data = floorplanData[type];
+        
+        // 設置標題
+        modal.querySelector('.modal-header h2').textContent = data.title;
+
+        // 載入照片
+        modalPhotoShowcase.innerHTML = data.images.map((src, index) => `
+            <img src="${src}" alt="${data.title}照片${index + 1}" class="${index === 0 ? 'active' : ''}" loading="lazy">
+        `).join('') + modalPhotoShowcase.querySelector('.modal-photo-controls').outerHTML;
+
+        // 載入基本資訊
+        modalInfoGrid.innerHTML = Object.entries(data.info).map(([label, value]) => `
+            <div class="modal-info-item">
+                <div class="modal-info-label">${label}</div>
+                <div class="modal-info-value">${value}</div>
+            </div>
+        `).join('');
+
+        // 載入特色說明
+        modalFeatures.innerHTML = `
+            <h3>${data.features.title}</h3>
+            <p>${data.features.description}</p>
+        `;
+
+        currentPhotoIndex = 0;
+        modal.classList.add('active');
+    }
+
+    window.openModal = openModal;
+    window.closeModal = function() {
+        document.querySelector('.modal-overlay').classList.remove('active');
+    };
 }); 

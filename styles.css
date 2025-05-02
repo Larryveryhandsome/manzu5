@@ -157,13 +157,74 @@ nav {
 footer {
     background-color: var(--primary-color);
     color: white;
-    padding: 2rem;
+    padding: 3rem 2rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.footer-section {
+    padding: 1rem;
+}
+
+.footer-section h3 {
+    color: #fff;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.footer-section h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 2px;
+    background-color: var(--secondary-color);
+}
+
+.footer-section p {
+    margin: 0.8rem 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-section a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: white;
+}
+
+.footer-section i {
+    margin-right: 0.5rem;
+    width: 20px;
     text-align: center;
 }
 
-footer p {
-    margin: 0.5rem 0;
-    font-size: 0.9rem;
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-section {
+        text-align: center;
+    }
+    
+    .footer-section h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
 
 .floorplans {
@@ -387,40 +448,39 @@ footer p {
     }
 }
 
+/* 建材設備表樣式 */
 .materials {
-    padding: 8rem 5% 5rem;
+    padding: 4rem 2rem;
     background-color: var(--light-bg);
 }
 
 .materials h2 {
     text-align: center;
-    margin-bottom: 3rem;
-    font-size: 2.5rem;
+    margin-bottom: 2rem;
     color: var(--primary-color);
-    padding-top: 2rem;
 }
 
 .materials-container {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
 }
 
 .material-category {
-    background: var(--white);
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .material-category h3 {
-    color: var(--secondary-color);
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    border-bottom: 2px solid var(--secondary-color);
-    padding-bottom: 0.5rem;
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    margin: 0;
+    font-size: 1.2rem;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -429,7 +489,7 @@ footer p {
 
 .material-category h3::after {
     content: '▼';
-    font-size: 1rem;
+    font-size: 0.8rem;
     transition: transform 0.3s ease;
 }
 
@@ -438,54 +498,38 @@ footer p {
 }
 
 .material-category-content {
+    padding: 1rem;
     max-height: 1000px;
-    overflow: hidden;
-    transition: max-height 0.5s ease;
+    transition: max-height 0.3s ease;
 }
 
 .material-category.collapsed .material-category-content {
     max-height: 0;
-}
-
-.material-category p {
-    margin-bottom: 1rem;
-    line-height: 1.8;
+    padding: 0;
 }
 
 .material-category ul {
     list-style: none;
-    padding-left: 1.5rem;
+    padding: 0;
+    margin: 0;
 }
 
-.material-category ul li {
-    margin-bottom: 0.8rem;
-    position: relative;
-    line-height: 1.6;
+.material-category li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
 }
 
-.material-category ul li::before {
-    content: '•';
-    color: var(--secondary-color);
-    position: absolute;
-    left: -1rem;
+.material-category li:last-child {
+    border-bottom: none;
 }
 
 @media (max-width: 768px) {
     .materials {
-        padding: 6rem 5% 3rem;
+        padding: 2rem 1rem;
     }
-
-    .materials h2 {
-        font-size: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .material-category {
-        padding: 1.5rem;
-    }
-
-    .material-category h3 {
-        font-size: 1.5rem;
+    
+    .materials-container {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -625,169 +669,641 @@ footer p {
 }
 
 .detail-page {
-    padding-top: 80px;
+    padding: 6rem 2rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    padding-bottom: 3rem;
 }
 
-.floorplan-detail {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-.floorplan-detail h1 {
+.house-title {
+    font-size: 2.8rem;
+    color: #2c3e50;
+    margin-bottom: 2.5rem;
     text-align: center;
-    padding: 2rem;
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    border-bottom: 2px solid #eee;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.house-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(to right, #3498db, #2ecc71);
+    border-radius: 3px;
+}
+
+.house-info {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
 .info-section {
-    padding: 2rem;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 3rem;
 }
 
 .info-section:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
 }
 
 .info-section h2 {
-    color: var(--secondary-color);
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid #e9ecef;
     position: relative;
-    padding-left: 1rem;
 }
 
 .info-section h2::before {
     content: '';
     position: absolute;
+    bottom: -2px;
     left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background-color: var(--secondary-color);
-    border-radius: 2px;
+    width: 50px;
+    height: 2px;
+    background: #3498db;
 }
 
 .info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
 }
 
 .info-item {
     background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
+    padding: 1.5rem;
+    border-radius: 12px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.info-item.price {
-    grid-column: 1 / -1;
-    background: var(--primary-color);
-    color: white;
+.info-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.info-item .label {
-    color: #666;
-    font-weight: 500;
+.info-label {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.info-item.price .label,
-.info-item.price .value {
-    color: white;
+.info-value {
+    font-size: 1.4rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.feature-content {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    line-height: 1.8;
+}
+
+.feature-content p {
+    margin: 0;
+    color: #444;
     font-size: 1.2rem;
 }
 
-.feature-list,
-.surroundings-list {
-    list-style: none;
-    padding: 0;
+.space-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
-.feature-list li,
-.surroundings-list li {
+.space-item {
     background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    padding: 2rem;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.floor-layout {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
+.space-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.floor {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 8px;
-}
-
-.floor h3 {
-    color: var(--primary-color);
+.space-item h3 {
+    color: #2c3e50;
     margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--secondary-color);
+    font-size: 1.3rem;
+    position: relative;
+    padding-left: 1.5rem;
 }
 
-.floor ul {
-    list-style: none;
-    padding: 0;
+.space-item h3::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #3498db;
 }
 
-.floor li {
-    padding: 0.5rem 0;
+.space-item p {
     color: #666;
-}
-
-.floor li:not(:last-child) {
-    border-bottom: 1px dashed #ddd;
-}
-
-.features-list {
-    margin-top: 1rem;
-}
-
-.features-list p {
-    background: #f8f9fa;
-    padding: 0.8rem;
-    border-radius: 6px;
-    margin-bottom: 0.5rem;
+    margin: 0;
+    line-height: 1.6;
+    font-size: 1.1rem;
 }
 
 @media (max-width: 768px) {
     .detail-page {
-        padding: 60px 1rem 2rem;
+        padding: 5rem 1rem 1rem;
     }
-
-    .info-section {
-        padding: 1.5rem;
+    
+    .house-title {
+        font-size: 2.2rem;
     }
+    
+    .photo-showcase {
+        height: 300px;
+    }
+    
+    .info-section h2 {
+        font-size: 1.8rem;
+    }
+    
+    .info-grid,
+    .space-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .info-item,
+    .space-item {
+        padding: 1.2rem;
+    }
+    
+    .photo-control {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+    }
+}
 
+/* 房型詳細頁面的照片輪播 */
+.photo-showcase {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    margin-bottom: 3rem;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.photo-showcase img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.photo-showcase img.active {
+    opacity: 1;
+}
+
+.photo-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 10;
+}
+
+.photo-control {
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.photo-control:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.photo-indicator {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+/* 房型詳細資訊浮動視窗 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    position: relative;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 2rem;
+    overflow-y: auto;
+    max-height: calc(90vh - 80px);
+}
+
+.modal-photo-showcase {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.modal-photo-showcase img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.modal-photo-showcase img.active {
+    opacity: 1;
+}
+
+.modal-photo-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 10;
+}
+
+.modal-photo-control {
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.modal-photo-control:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.modal-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.modal-info-item {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.modal-info-item:hover {
+    transform: translateY(-5px);
+}
+
+.modal-info-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal-info-value {
+    font-size: 1.4rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.modal-features {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.modal-features h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.modal-features h3::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #3498db;
+}
+
+.modal-features p {
+    color: #666;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .modal-photo-showcase {
+        height: 300px;
+    }
+    
+    .modal-info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 更新房型卡片樣式 */
+.floorplan-card {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.floorplan-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.details-link {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 1rem;
+    transition: background 0.3s ease;
+}
+
+.details-link:hover {
+    background: #2980b9;
+}
+
+/* 導航按鈕樣式 */
+.navigation-btn {
+    display: inline-block;
+    background-color: #4285f4;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-top: 1.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.navigation-btn:hover {
+    background-color: #3367d6;
+}
+
+.navigation-btn i {
+    margin-right: 0.5rem;
+}
+
+/* 特色房型樣式 */
+.floorplan-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    margin-bottom: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.featured-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.featured-header {
+    margin-bottom: 2rem;
+}
+
+.featured-header h3 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.featured-header .subtitle {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.featured-info {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-item .label {
+    font-size: 0.9rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.info-item .value {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.info-item .value.price {
+    color: var(--accent-color);
+    font-size: 1.8rem;
+}
+
+.featured-gallery {
+    position: relative;
+    height: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.featured-gallery img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.featured-gallery img.active {
+    opacity: 1;
+}
+
+@media (max-width: 1024px) {
+    .floorplan-card.featured {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-gallery {
+        height: 400px;
+        order: -1;
+    }
+    
+    .featured-content {
+        padding: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .featured-gallery {
+        height: 300px;
+    }
+    
+    .featured-header h3 {
+        font-size: 2rem;
+    }
+    
     .info-grid {
         grid-template-columns: 1fr;
     }
-
-    .feature-list,
-    .surroundings-list {
-        grid-template-columns: 1fr;
-    }
-
-    .floor-layout {
-        grid-template-columns: 1fr;
+    
+    .featured-info {
+        padding: 1.5rem;
     }
 } 
