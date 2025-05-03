@@ -7,10 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (img.dataset.src) {
                     img.src = img.dataset.src;
                     img.removeAttribute('data-src');
+                    img.style.display = 'block';
                 }
                 observer.unobserve(img);
             }
         });
+    }, {
+        rootMargin: '50px 0px',
+        threshold: 0.1
     });
 
     // 為每個相簿初始化輪播功能
@@ -27,11 +31,19 @@ document.addEventListener('DOMContentLoaded', function() {
             imageObserver.observe(img);
         });
 
-        // 使用 CSS classes 來控制顯示/隱藏，減少DOM操作
+        // 更新圖片顯示狀態
         function updateGallery() {
             images.forEach((img, index) => {
-                img.classList.toggle('active', index === currentIndex);
-                img.classList.toggle('hidden', index !== currentIndex);
+                if (index === currentIndex) {
+                    img.style.display = 'block';
+                    img.style.opacity = '1';
+                    if (img.dataset.src && !img.src.includes(img.dataset.src)) {
+                        img.src = img.dataset.src;
+                    }
+                } else {
+                    img.style.display = 'none';
+                    img.style.opacity = '0';
+                }
             });
         }
 
@@ -539,15 +551,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // 設置標題
         modal.querySelector('.modal-header h2').textContent = data.title;
 
-        // 優化照片載入
+        // 載入照片
         modalPhotoShowcase.innerHTML = data.images.map((src, index) => `
-            <img 
-                data-src="${src}" 
-                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                alt="${data.title}照片${index + 1}" 
-                class="${index === 0 ? 'active' : ''}" 
-                loading="lazy"
-            >
+            <img src="${src}" 
+                 alt="${data.title}照片${index + 1}" 
+                 class="${index === 0 ? 'active' : ''}" 
+                 loading="lazy">
         `).join('') + modalPhotoShowcase.querySelector('.modal-photo-controls').outerHTML;
 
         // 使用 IntersectionObserver 懶加載模態框圖片
