@@ -1,0 +1,15 @@
+{
+  "name": "manzu5",
+  "version": "1.0.0",
+  "description": "滿築5一站式介紹網頁",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  }
+}

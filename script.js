@@ -5,12 +5,22 @@ document.addEventListener('DOMContentLoaded', function() {
         preloadQueue: new Set(),
         observer: null,
         isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+        cloudinaryUrl: 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload',
         getOptimizedImageUrl: function(src) {
-            if (this.isMobile) {
-                // 為手機用戶提供較小的圖片
-                return src.replace(/(\/[^\/]+)$/, '/mobile$1');
-            }
-            return src;
+            // 如果已經是 Cloudinary URL，直接返回
+            if (src.includes('cloudinary.com')) return src;
+            
+            // 將本地路徑轉換為 Cloudinary URL
+            const fileName = src.split('/').pop();
+            const width = this.isMobile ? 800 : 1200;
+            const options = [
+                'f_auto', // 自動選擇最佳格式
+                'q_auto', // 自動優化質量
+                `w_${width}`, // 設置寬度
+                'c_limit' // 保持總體比例
+            ].join(',');
+            
+            return `${this.cloudinaryUrl}/${options}/${fileName}`;
         },
         preloadImage: function(src) {
             if (!this.preloadQueue.has(src)) {
@@ -612,19 +622,34 @@ document.addEventListener('DOMContentLoaded', function() {
         // 載入照片，使用縮圖預覽
         modalPhotoShowcase.innerHTML = data.images.map((src, index) => {
             // 生成縮圖URL
-            const thumbSrc = imageManager.isMobile ? 
-                src.replace(/(\/[^\/]+)$/, '/mobile$1') : 
-                src.replace(/(\/[^\/]+)$/, '/thumbnails$1');
+            const fileName = src.split('/').pop();
+            const thumbWidth = imageManager.isMobile ? 400 : 600;
+            const thumbOptions = [
+                'f_auto',
+                'q_auto',
+                `w_${thumbWidth}`,
+                'c_limit'
+            ].join(',');
+            const thumbSrc = `${imageManager.cloudinaryUrl}/${thumbOptions}/${fileName}`;
+            
+            // 生成高清圖片URL
+            const fullOptions = [
+                'f_auto',
+                'q_auto',
+                `w_${imageManager.isMobile ? 800 : 1200}`,
+                'c_limit'
+            ].join(',');
+            const fullSrc = `${imageManager.cloudinaryUrl}/${fullOptions}/${fileName}`;
             
             return `
                 <div class="photo-container" style="position: relative;">
                     <img 
-                        data-src="${src}" 
+                        data-src="${fullSrc}" 
                         src="${thumbSrc}" 
                         alt="${data.title}照片${index + 1}" 
                         class="${index === 0 ? 'active' : ''}" 
                         loading="${index < 3 ? 'eager' : 'lazy'}"
-                        style="filter: blur(0px); transition: filter 0.3s ease-out;"
+                        style="filter: blur(1px); transition: filter 0.3s ease-out;"
                         onload="this.style.filter = 'blur(0px)';"
                     >
                     <div class="loading-indicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px;">載入中...</div>
