@@ -2,18 +2,17 @@
 const nextConfig = {
   output: 'export',
   images: {
-    unoptimized: false,
-    minimumCacheTTL: 60,
-    deviceSizes: [640, 750, 828, 1080, 1200],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    domains: ['github.com', 'raw.githubusercontent.com'],
-    formats: ['image/webp'],
+    unoptimized: true, // 設置為 true 以支援靜態導出
+    loader: 'custom',
+    loaderFile: './image-loader.js',
   },
-  // 其他優化配置
-  compress: true,
-  poweredByHeader: false,
+  // 基本配置
   reactStrictMode: true,
   swcMinify: true,
+  trailingSlash: true,
+  // GitHub Pages 的基本路徑配置
+  basePath: '/manzu5',
+  assetPrefix: '/manzu5',
 }
 
 module.exports = nextConfig
