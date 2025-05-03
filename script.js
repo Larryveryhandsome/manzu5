@@ -1,4 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 使用 IntersectionObserver 實現圖片懶加載
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                }
+                observer.unobserve(img);
+            }
+        });
+    });
+
     // 為每個相簿初始化輪播功能
     const galleries = document.querySelectorAll('.floorplan-gallery');
     
@@ -8,16 +22,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const nextBtn = gallery.querySelector('.gallery-control.next');
         let currentIndex = 0;
 
-        // 隱藏所有圖片，只顯示當前圖片
+        // 初始化懶加載
+        images.forEach(img => {
+            imageObserver.observe(img);
+        });
+
+        // 使用 CSS classes 來控制顯示/隱藏，減少DOM操作
         function updateGallery() {
             images.forEach((img, index) => {
-                if (index === currentIndex) {
-                    img.style.display = 'block';
-                    img.style.opacity = '1';
-                } else {
-                    img.style.display = 'none';
-                    img.style.opacity = '0';
-                }
+                img.classList.toggle('active', index === currentIndex);
+                img.classList.toggle('hidden', index !== currentIndex);
             });
         }
 
@@ -104,11 +118,22 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentIndex = 0;
     let isTransitioning = false;
 
-    // 預加載下一張圖片
+    // 優化的預加載函數
+    const preloadQueue = new Set();
     function preloadNextImage(index) {
         const nextIndex = (index + 1) % images.length;
-        const nextImage = new Image();
-        nextImage.src = images[nextIndex].src;
+        const nextImage = images[nextIndex];
+        
+        if (nextImage.dataset.src && !preloadQueue.has(nextImage.dataset.src)) {
+            preloadQueue.add(nextImage.dataset.src);
+            const img = new Image();
+            img.onload = () => {
+                nextImage.src = nextImage.dataset.src;
+                nextImage.removeAttribute('data-src');
+                preloadQueue.delete(nextImage.dataset.src);
+            };
+            img.src = nextImage.dataset.src;
+        }
     }
 
     // 顯示第一張圖片並預加載第二張
@@ -514,10 +539,22 @@ document.addEventListener('DOMContentLoaded', function() {
         // 設置標題
         modal.querySelector('.modal-header h2').textContent = data.title;
 
-        // 載入照片
+        // 優化照片載入
         modalPhotoShowcase.innerHTML = data.images.map((src, index) => `
-            <img src="${src}" alt="${data.title}照片${index + 1}" class="${index === 0 ? 'active' : ''}" loading="lazy">
+            <img 
+                data-src="${src}" 
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                alt="${data.title}照片${index + 1}" 
+                class="${index === 0 ? 'active' : ''}" 
+                loading="lazy"
+            >
         `).join('') + modalPhotoShowcase.querySelector('.modal-photo-controls').outerHTML;
+
+        // 使用 IntersectionObserver 懶加載模態框圖片
+        const modalImages = modalPhotoShowcase.querySelectorAll('img');
+        modalImages.forEach(img => {
+            imageObserver.observe(img);
+        });
 
         // 載入基本資訊
         modalInfoGrid.innerHTML = Object.entries(data.info).map(([label, value]) => `
