@@ -3,9 +3,18 @@ import Image from 'next/image'
 
 // 預設圖片列表
 export const images = [
-  { url: '/images/1.jpg', title: '滿築5-1' },
-  { url: '/images/2.jpg', title: '滿築5-2' },
-  { url: '/images/3.jpg', title: '滿築5-3' },
+  { 
+    url: 'https://raw.githubusercontent.com/Larryveryhandsome/manzu5/main/public/images/1.jpg', 
+    title: '滿築5-1' 
+  },
+  { 
+    url: 'https://raw.githubusercontent.com/Larryveryhandsome/manzu5/main/public/images/2.jpg', 
+    title: '滿築5-2' 
+  },
+  { 
+    url: 'https://raw.githubusercontent.com/Larryveryhandsome/manzu5/main/public/images/3.jpg', 
+    title: '滿築5-3' 
+  },
   // ... 更多圖片
 ]
 

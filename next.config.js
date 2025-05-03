@@ -2,9 +2,13 @@
 const nextConfig = {
   output: 'export',
   images: {
-    unoptimized: true, // 設置為 true 以支援靜態導出
-    loader: 'custom',
-    loaderFile: './image-loader.js',
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.githubusercontent.com',
+      },
+    ],
   },
   // 基本配置
   reactStrictMode: true,
