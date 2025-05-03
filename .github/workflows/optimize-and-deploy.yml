@@ -1,0 +1,51 @@
+name: Optimize Images and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Optimize Images
+      uses: calibreapp/image-actions@main
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        jpegQuality: '80'
+        pngQuality: '80'
+        webpQuality: '80'
+        ignorePaths: 'node_modules/**,build/**,dist/**'
+    
+    - name: Cache images
+      uses: actions/cache@v2
+      with:
+        path: |
+          images
+          thumbnails
+        key: ${{ runner.os }}-images-${{ hashFiles('**/*.{png,jpg,jpeg}') }}
+        restore-keys: |
+          ${{ runner.os }}-images-
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build
+      run: npm run build
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+        cname: ${{ secrets.CUSTOM_DOMAIN }}
+        enable_jekyll: false
