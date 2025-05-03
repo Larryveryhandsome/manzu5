@@ -1,21 +1,45 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 使用 IntersectionObserver 實現圖片懶加載
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                if (img.dataset.src) {
-                    img.src = img.dataset.src;
-                    img.removeAttribute('data-src');
-                    img.style.display = 'block';
-                }
-                observer.unobserve(img);
+    // 圖片載入管理
+    const imageManager = {
+        loadQueue: new Set(),
+        preloadQueue: new Set(),
+        observer: null,
+        preloadImage: function(src) {
+            if (!this.preloadQueue.has(src)) {
+                this.preloadQueue.add(src);
+                const img = new Image();
+                img.onload = () => this.preloadQueue.delete(src);
+                img.src = src;
             }
-        });
-    }, {
-        rootMargin: '50px 0px',
-        threshold: 0.1
-    });
+        },
+        init: function() {
+            this.observer = new IntersectionObserver(
+                (entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            if (img.dataset.src && !this.loadQueue.has(img.dataset.src)) {
+                                this.loadQueue.add(img.dataset.src);
+                                img.onload = () => {
+                                    img.style.display = 'block';
+                                    this.loadQueue.delete(img.dataset.src);
+                                };
+                                img.src = img.dataset.src;
+                                img.removeAttribute('data-src');
+                            }
+                            observer.unobserve(img);
+                        }
+                    });
+                },
+                {
+                    rootMargin: '100px 0px',
+                    threshold: 0.1
+                }
+            );
+        }
+    };
+    
+    imageManager.init();
 
     // 為每個相簿初始化輪播功能
     const galleries = document.querySelectorAll('.floorplan-gallery');
@@ -28,17 +52,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 初始化懶加載
         images.forEach(img => {
-            imageObserver.observe(img);
+            imageManager.observer.observe(img);
         });
 
-        // 更新圖片顯示狀態
+        // 更新圖片顯示狀態並預加載下一張
         function updateGallery() {
             images.forEach((img, index) => {
                 if (index === currentIndex) {
                     img.style.display = 'block';
                     img.style.opacity = '1';
-                    if (img.dataset.src && !img.src.includes(img.dataset.src)) {
+                    if (img.dataset.src) {
                         img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                    }
+                    // 預加載下一張圖片
+                    const nextIndex = (index + 1) % images.length;
+                    const nextImg = images[nextIndex];
+                    if (nextImg.dataset.src) {
+                        imageManager.preloadImage(nextImg.dataset.src);
                     }
                 } else {
                     img.style.display = 'none';
@@ -551,18 +582,32 @@ document.addEventListener('DOMContentLoaded', function() {
         // 設置標題
         modal.querySelector('.modal-header h2').textContent = data.title;
 
-        // 載入照片
-        modalPhotoShowcase.innerHTML = data.images.map((src, index) => `
-            <img src="${src}" 
-                 alt="${data.title}照片${index + 1}" 
-                 class="${index === 0 ? 'active' : ''}" 
-                 loading="lazy">
-        `).join('') + modalPhotoShowcase.querySelector('.modal-photo-controls').outerHTML;
+        // 載入照片，使用縮圖預覽
+        modalPhotoShowcase.innerHTML = data.images.map((src, index) => {
+            // 生成縮圖URL (假設縮圖在 thumbnails 子目錄)
+            const thumbSrc = src.replace(/(\/[^\/]+)$/, '/thumbnails$1');
+            return `
+                <img 
+                    data-src="${src}" 
+                    src="${thumbSrc}" 
+                    alt="${data.title}照片${index + 1}" 
+                    class="${index === 0 ? 'active' : ''}" 
+                    loading="lazy"
+                    style="filter: blur(0px); transition: filter 0.3s ease-out;"
+                    onload="this.style.filter = 'blur(0px)';"
+                >`;
+        }).join('') + modalPhotoShowcase.querySelector('.modal-photo-controls').outerHTML;
+
+        // 預加載第一張高清圖片
+        const firstImg = modalPhotoShowcase.querySelector('img');
+        if (firstImg) {
+            imageManager.preloadImage(firstImg.dataset.src);
+        }
 
         // 使用 IntersectionObserver 懶加載模態框圖片
         const modalImages = modalPhotoShowcase.querySelectorAll('img');
         modalImages.forEach(img => {
-            imageObserver.observe(img);
+            imageManager.observer.observe(img);
         });
 
         // 載入基本資訊
