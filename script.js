@@ -4,12 +4,27 @@ document.addEventListener('DOMContentLoaded', function() {
         loadQueue: new Set(),
         preloadQueue: new Set(),
         observer: null,
+        isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+        getOptimizedImageUrl: function(src) {
+            if (this.isMobile) {
+                // 為手機用戶提供較小的圖片
+                return src.replace(/(\/[^\/]+)$/, '/mobile$1');
+            }
+            return src;
+        },
         preloadImage: function(src) {
             if (!this.preloadQueue.has(src)) {
                 this.preloadQueue.add(src);
                 const img = new Image();
-                img.onload = () => this.preloadQueue.delete(src);
-                img.src = src;
+                img.onload = () => {
+                    this.preloadQueue.delete(src);
+                    // 移除載入中指示器
+                    const loadingIndicator = document.querySelector(`[data-loading-for="${src}"]`);
+                    if (loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                };
+                img.src = this.getOptimizedImageUrl(src);
             }
         },
         init: function() {
@@ -19,12 +34,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (entry.isIntersecting) {
                             const img = entry.target;
                             if (img.dataset.src && !this.loadQueue.has(img.dataset.src)) {
+                                // 顯示載入中指示器
+                                const container = img.parentElement;
+                                let loadingIndicator = container.querySelector('.loading-indicator');
+                                if (!loadingIndicator) {
+                                    loadingIndicator = document.createElement('div');
+                                    loadingIndicator.className = 'loading-indicator';
+                                    loadingIndicator.innerHTML = '載入中...';
+                                    loadingIndicator.setAttribute('data-loading-for', img.dataset.src);
+                                    container.appendChild(loadingIndicator);
+                                }
+                                
                                 this.loadQueue.add(img.dataset.src);
                                 img.onload = () => {
                                     img.style.display = 'block';
                                     this.loadQueue.delete(img.dataset.src);
+                                    loadingIndicator.style.display = 'none';
                                 };
-                                img.src = img.dataset.src;
+                                img.src = this.getOptimizedImageUrl(img.dataset.src);
                                 img.removeAttribute('data-src');
                             }
                             observer.unobserve(img);
@@ -32,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 },
                 {
-                    rootMargin: '100px 0px',
+                    rootMargin: '150px 0px',
                     threshold: 0.1
                 }
             );
@@ -584,18 +611,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 載入照片，使用縮圖預覽
         modalPhotoShowcase.innerHTML = data.images.map((src, index) => {
-            // 生成縮圖URL (假設縮圖在 thumbnails 子目錄)
-            const thumbSrc = src.replace(/(\/[^\/]+)$/, '/thumbnails$1');
+            // 生成縮圖URL
+            const thumbSrc = imageManager.isMobile ? 
+                src.replace(/(\/[^\/]+)$/, '/mobile$1') : 
+                src.replace(/(\/[^\/]+)$/, '/thumbnails$1');
+            
             return `
-                <img 
-                    data-src="${src}" 
-                    src="${thumbSrc}" 
-                    alt="${data.title}照片${index + 1}" 
-                    class="${index === 0 ? 'active' : ''}" 
-                    loading="lazy"
-                    style="filter: blur(0px); transition: filter 0.3s ease-out;"
-                    onload="this.style.filter = 'blur(0px)';"
-                >`;
+                <div class="photo-container" style="position: relative;">
+                    <img 
+                        data-src="${src}" 
+                        src="${thumbSrc}" 
+                        alt="${data.title}照片${index + 1}" 
+                        class="${index === 0 ? 'active' : ''}" 
+                        loading="${index < 3 ? 'eager' : 'lazy'}"
+                        style="filter: blur(0px); transition: filter 0.3s ease-out;"
+                        onload="this.style.filter = 'blur(0px)';"
+                    >
+                    <div class="loading-indicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px;">載入中...</div>
+                </div>`;
         }).join('') + modalPhotoShowcase.querySelector('.modal-photo-controls').outerHTML;
 
         // 預加載第一張高清圖片
